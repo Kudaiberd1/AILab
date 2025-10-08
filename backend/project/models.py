@@ -12,13 +12,13 @@ class ProjectModel(models.Model):
 
     title = models.CharField(max_length=200)
     description = models.TextField()
-    photo = models.ForeignKey(PhotoModel, on_delete=models.CASCADE, related_name="Project_photos", blank=True, null=True)
+    photo = models.ManyToManyField(PhotoModel, related_name="Project_photos", blank=True)
     link = models.CharField(max_length=100, null=True)
     status = models.IntegerField(choices=Status.choices, default=Status.STARTING)
-    author = models.ManyToManyField("authors.AuthorModel", null=True, blank=True)
-    tags = models.ManyToManyField("tag.TagModel", null=True, blank=True)
-    stacks = models.ManyToManyField("stack.StackModel", null=True, blank=True)
-    started_date = models.DateField(null=True)
+    author = models.ManyToManyField("authors.AuthorModel", blank=True)
+    tags = models.ManyToManyField("tag.TagModel", blank=True)
+    stacks = models.ManyToManyField("stack.StackModel", blank=True)
+    started_date = models.DateField(null=True, blank=True)
     ended_date = models.DateField(null=True, blank=True)
 
     def __str__(self):

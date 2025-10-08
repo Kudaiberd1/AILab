@@ -3,9 +3,9 @@ from rest_framework.exceptions import NotFound
 
 def get_author(author_id: int) -> AuthorModel:
 
-    project = AuthorModel.objects.filter(pk=author_id).first()
+    author = AuthorModel.objects.filter(pk=author_id).first()
 
-    if not project:
+    if not author:
         raise NotFound
     
-    return project
+    return author

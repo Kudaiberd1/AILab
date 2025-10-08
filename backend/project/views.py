@@ -13,7 +13,6 @@ from .services import *
 from .selectors import get_project
 
 class ProjectApiView(APIView):
-    permission_classes = [IsAdminUser]
     
     def get(self, request, format=None):
         project = get_project(request.data['id'])
@@ -21,7 +20,9 @@ class ProjectApiView(APIView):
         return Response(serializer.data, status=200)
     
     def post(self, request, format=None):
-        serializer = ProjectSerializer(data=request.data)
+        f_data=format_check_data(request.data)
+
+        serializer = ProjectSerializer(data=f_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
@@ -29,12 +30,14 @@ class ProjectApiView(APIView):
     
     def patch(self, request, format=None):
         id=request.data['id']
+        f_data=format_check_data(request.data)
+
         try:
             project = ProjectModel.objects.get(pk=id)
         except:
-            return Response({"error": "Message not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = ProjectSerializer(project, data=request.data, partial=True)
+        serializer = ProjectSerializer(project, data=f_data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=200)
@@ -46,8 +49,8 @@ class ProjectApiView(APIView):
         try:
             project = ProjectModel.objects.get(pk=id)
         except:
-            return Response({"error": "Message not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
         
         project.delete()
-        return Response({"message": "Message deleted"}, status=204)
+        return Response({"message": "Project deleted"}, status=204)
     
