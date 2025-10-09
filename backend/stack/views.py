@@ -21,3 +21,11 @@ class StackApiView(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+
+class GetStacksApiView(APIView):
+
+    def get(self, request, format=None):
+        stacks = StackModel.objects.all()
+        serializer = StackSerializer(stacks, many=True)
+        return Response(serializer.data, status=200)

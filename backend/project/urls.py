@@ -5,6 +5,7 @@ from .views import *
 
 urlpatterns = [
     path('api/project/', ProjectApiView.as_view()),
+    path('api/projects/', GetAllProjectsApiView.as_view()),
 ]
 
 

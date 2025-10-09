@@ -13,7 +13,11 @@ from .services import *
 from .selectors import *
 
 class TagApiView(APIView):
-    permission_classes = [IsAdminUser]
+
+    def get(self, request, format=None):
+        tags = TagModel.objects.all()
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data, status=200)
 
     def post(self, request, format=None):
         serializer = TagSerializer(data=request.data)

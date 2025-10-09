@@ -54,3 +54,10 @@ class ProjectApiView(APIView):
         project.delete()
         return Response({"message": "Project deleted"}, status=204)
     
+
+class GetAllProjectsApiView(APIView):
+
+    def get(self, request, format=None):
+        projects = ProjectModel.objects.all()
+        serializer = ProjectSerializer(projects, many=True)
+        return Response(serializer.data, status=200)

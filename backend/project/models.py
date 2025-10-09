@@ -12,8 +12,9 @@ class ProjectModel(models.Model):
 
     title = models.CharField(max_length=200)
     description = models.TextField()
+    about = models.TextField(null=True)
     photo = models.ManyToManyField(PhotoModel, related_name="Project_photos", blank=True)
-    link = models.CharField(max_length=100, null=True)
+    link = models.CharField(max_length=100, blank=True, null=True)
     status = models.IntegerField(choices=Status.choices, default=Status.STARTING)
     author = models.ManyToManyField("authors.AuthorModel", blank=True)
     tags = models.ManyToManyField("tag.TagModel", blank=True)

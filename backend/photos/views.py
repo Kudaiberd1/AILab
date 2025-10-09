@@ -25,3 +25,10 @@ class PhotoApiView(APIView):
             return Response(serializer.data, status=201)
         
         return Response(serializer.errors, status=400)
+    
+class GetPhotosApiView(APIView):
+
+    def get(self, request, format=None):
+        photos = PhotoModel.objects.all()
+        serializer = PhotoSerializer(photos, many=True)
+        return Response(serializer.data, status=200)

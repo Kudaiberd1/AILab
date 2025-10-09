@@ -24,6 +24,8 @@ import authors.urls
 import project.urls
 import stack.urls
 import tag.urls
+import photos.urls
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,4 +34,6 @@ urlpatterns = [
     path('', include(project.urls)),
     path('', include(authors.urls)),
     path('', include(tag.urls)),
+    path('', include(stack.urls)),
+    path('', include(photos.urls)),
 ]
