@@ -14,8 +14,8 @@ from .selectors import get_project
 
 class ProjectApiView(APIView):
     
-    def get(self, request, format=None):
-        project = get_project(request.data['id'])
+    def get(self, request, id, format=None):
+        project = get_project(id)
         serializer = ProjectSerializer(project)
         return Response(serializer.data, status=200)
     
@@ -28,8 +28,7 @@ class ProjectApiView(APIView):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
     
-    def patch(self, request, format=None):
-        id=request.data['id']
+    def patch(self, request, id, format=None):
         f_data=format_check_data(request.data)
 
         try:
@@ -44,8 +43,7 @@ class ProjectApiView(APIView):
         
         return Response(serializer.errors, status=400)
     
-    def delete(self, request, format=None):
-        id=request.data['id']
+    def delete(self, request, id, format=None):
         try:
             project = ProjectModel.objects.get(pk=id)
         except:

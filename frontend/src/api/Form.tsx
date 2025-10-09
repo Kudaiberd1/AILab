@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "./api";
-//import { authorizedContext } from "./ProtectedRoute";
+import { Authorized, UserContext } from "../App";
 
 export const url = "http://localhost:5173";
 
@@ -19,7 +19,8 @@ const Form = ({ route, method }: Props) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  //const { setIsAuthorized } = useContext(authorizedContext);
+  const { setAuthorized } = useContext(Authorized);
+  const { setUser } = useContext(UserContext);
 
   const name = method == "login" ? "Login" : "Register";
 
@@ -33,7 +34,17 @@ const Form = ({ route, method }: Props) => {
       if (method === "login") {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-        //setIsAuthorized(true);
+        api
+          .get("/api/my/")
+          .then((res) => {
+            setUser(res.data);
+            setAuthorized(true);
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err, "in user");
+            setAuthorized(false);
+          });
         navigate("/", { state: { refresh: true } });
       } else {
         navigate("/login");

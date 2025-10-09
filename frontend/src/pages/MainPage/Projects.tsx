@@ -1,23 +1,24 @@
-import { useEffect, useState } from "react";
-import type { Tag } from "./Filter";
-import api from "../../api/api";
+import { useContext, useEffect, useState } from "react";
 import { status_dict } from "../../services/constants";
+import { FilteredProjects, TagContext } from "./MainPage";
+import { useNavigate } from "react-router-dom";
+import { PhotoContext } from "../../App";
 
-interface Ids {
+export interface Ids {
   id: number;
 }
 
-interface Photo {
+export interface Photo {
   id: number;
   photo: string;
 }
 
-interface Stack {
+export interface Stack {
   id: number;
   stack_name: string;
 }
 
-interface Author {
+export interface Author {
   id: number;
   name: string;
   surename: string;
@@ -39,47 +40,21 @@ export interface Project {
 }
 
 const Projects = () => {
-  const [projects, setProjects] = useState<Project[]>();
-  const [photos, setPhotos] = useState<Photo[]>();
-  const [tags, setTags] = useState<Tag[]>();
-
-  useEffect(() => {
-    api
-      .get("/api/projects/")
-      .then((res) => {
-        setProjects(res.data);
-        console.log(res.data, "projects");
-      })
-      .then((err) => {
-        console.log(err, "project err");
-      });
-    api
-      .get("/api/photos/")
-      .then((res) => {
-        setPhotos(res.data);
-        console.log(res.data, "photos");
-      })
-      .then((err) => {
-        console.log(err, "project err");
-      });
-    api
-      .get("/api/tag/")
-      .then((res) => {
-        setTags(res.data);
-        //console.log(res);
-      })
-      .catch((err) => console.log(err, "err tag"));
-  }, []);
+  const { fprojects } = useContext(FilteredProjects);
+  const { photos } = useContext(PhotoContext);
+  const { tags } = useContext(TagContext);
+  const navigate = useNavigate();
 
   return (
     <div className="flex max-w-5xl mx-auto mt-20 bg-gray-100 rounded-lg">
       <div className="my-15 p-5">
         <h1 className="text-2xl font-semibold"> All Projects </h1>
         <div className="flex flex-wrap gap-3 pt-6">
-          {projects?.map((project) => (
+          {fprojects?.map((project) => (
             <div
               key={project.id}
-              className="items-center max-w-xs box shadow-sm bg-white rounded-xl hover:shadow-lg"
+              className="items-center max-w-xs box shadow-sm bg-white rounded-xl cursor-pointer hover:shadow-lg"
+              onClick={() => navigate(`/project/${project.id}`)}
             >
               <img
                 className="rounded-xl h-50 w-full"

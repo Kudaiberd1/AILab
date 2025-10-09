@@ -46,6 +46,9 @@ def check_new_stack(data):
         
         
         new.append(StackModel.objects.filter(stack_name=stack).values()[0]['id'])
+    
+    print(new, "author vdjsnjnjcdnkcdncdcjcjcjdnjkckcndkcndkcnjcdcjcndj")
+
 
     return new
 
@@ -63,6 +66,7 @@ def check_new_author(data):
         #print(AuthorModel.objects.filter(name=author, surename=author[1]).values())
         new.append(AuthorModel.objects.filter(name=author[0], surename=author[1]).values()[0]['id'])
     
+    print(new, "author vdjsnjnjcdnkcdncdcjcjcjdnjkckcndkcndkcnjcdcjcndj")
 
     return new
 

@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from .views import *
 
 urlpatterns = [
-    path('api/project/', ProjectApiView.as_view()),
+    path('api/project/<id>/', ProjectApiView.as_view()),
     path('api/projects/', GetAllProjectsApiView.as_view()),
 ]
 

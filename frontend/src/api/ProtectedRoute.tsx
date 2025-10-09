@@ -5,6 +5,13 @@ import { createContext, useEffect, useState } from "react";
 
 export const authorizedContext = createContext<any>(null);
 
+export interface DecodedToken {
+  id: number;
+  username: string;
+  is_staff: boolean;
+  exp: number;
+}
+
 export default function ProtectedRoute({ children }) {
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
   const ACCESS_TOKEN = "access";
@@ -12,7 +19,7 @@ export default function ProtectedRoute({ children }) {
 
   useEffect(() => {
     auth().catch(() => setIsAuthorized(false));
-  }, []);
+  }, [isAuthorized]);
 
   const refreshToken = async () => {
     const refresh = localStorage.getItem(REFRESH_TOKEN);
@@ -42,8 +49,9 @@ export default function ProtectedRoute({ children }) {
       setIsAuthorized(false);
       return;
     }
-    const decode = jwtDecode(token);
-    const tokenExpiration = (decode as { exp: number }).exp;
+    const decoded: DecodedToken = jwtDecode(token);
+    const tokenExpiration = decoded.exp;
+    //console.log(decoded.is_staff, "rnvjndjnjcndjcndj");
     const now = Date.now() / 1000;
     if (tokenExpiration < now) {
       await refreshToken();

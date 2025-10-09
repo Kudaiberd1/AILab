@@ -11,6 +11,7 @@ from django.db.models import Q
 from rest_framework import status
 from .services import *
 from .selectors import *
+from .permissions import *
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -32,14 +33,24 @@ class ProfileApiView(generics.ListAPIView):
     queryset=User.objects.all()
     serializer_class=UserSerializer
 
+
+class MyProfileApiView(generics.RetrieveUpdateAPIView):
+    serializer_class=UserSerializer
+    permission_classes = [IsAuthenticated, IsOwner]
+
+    def get_object(self):
+        return self.request.user
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
 # Authors for project
 
 class AuthorApiView(APIView):
-    permission_classes = [IsAdminUser]
 
     def get(self, request, format=None):
-        author = get_author(request.data['id'])
-        serializer = AuthorSerializer(author)
+        author = AuthorModel.objects.all()
+        serializer = AuthorSerializer(author, many=True)
         return Response(serializer.data, status=200)
 
     def post(self, request, format=None):

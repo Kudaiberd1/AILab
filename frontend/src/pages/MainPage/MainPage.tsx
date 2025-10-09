@@ -1,10 +1,50 @@
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import image from "../../assets/image-1.png";
-import Filter from "./Filter";
-import Projects from "./Projects";
+import Filter, { type Tag } from "./Filter";
+import Projects, { type Project } from "./Projects";
+import { createContext, useEffect, useState } from "react";
+import api from "../../api/api";
+
+export const FilteredProjects = createContext<any>(null);
+export const ProjectsContext = createContext<any>(null);
+export const TagContext = createContext<{
+  tags: Tag[] | undefined;
+  setTags: React.Dispatch<React.SetStateAction<Tag[] | undefined>>;
+}>({
+  tags: [],
+  setTags: () => {},
+});
+export const SelectedTagContext = createContext<any>(null);
+export const SelectedStatusContext = createContext<any>(null);
 
 const MainPage = () => {
+  const [projects, setProjects] = useState<Project[]>();
+  const [fprojects, setFprojects] = useState<Project[]>();
+  const [tags, setTags] = useState<Tag[]>();
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState<number[]>([]);
+
+  useEffect(() => {
+    api
+      .get("/api/projects/")
+      .then((res) => {
+        setProjects(res.data);
+        setFprojects(res.data);
+        console.log(res.data, "projects");
+      })
+      .then((err) => {
+        console.log(err, "project err");
+      });
+    api
+      .get("/api/tag/")
+      .then((res) => {
+        setTags(res.data);
+        //console.log(res);
+      })
+      .catch((err) => console.log(err, "err tag"));
+  }, []);
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
@@ -30,8 +70,22 @@ const MainPage = () => {
               <img src={image} height={1024} width={512} className="rounded" />
             </div>
           </div>
-          <Filter />
-          <Projects />
+          <TagContext.Provider value={{ tags, setTags }}>
+            <ProjectsContext.Provider value={{ projects, setProjects }}>
+              <FilteredProjects.Provider value={{ fprojects, setFprojects }}>
+                <SelectedTagContext.Provider
+                  value={{ selectedTags, setSelectedTags }}
+                >
+                  <SelectedStatusContext.Provider
+                    value={{ selectedStatus, setSelectedStatus }}
+                  >
+                    <Filter />
+                    <Projects />
+                  </SelectedStatusContext.Provider>
+                </SelectedTagContext.Provider>
+              </FilteredProjects.Provider>
+            </ProjectsContext.Provider>
+          </TagContext.Provider>
         </main>
         <Footer />
       </div>
