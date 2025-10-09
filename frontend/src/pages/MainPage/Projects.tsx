@@ -82,7 +82,7 @@ const Projects = () => {
               className="items-center max-w-xs box shadow-sm bg-white rounded-xl hover:shadow-lg"
             >
               <img
-                className="rounded-xl h-50"
+                className="rounded-xl h-50 w-full"
                 height={192}
                 src={`http://localhost:8000${
                   photos?.find((p) => p.id === project.photo[0])?.photo
