@@ -11,7 +11,12 @@ const Footer = () => {
         <a href="#" aria-label="Twitter" className="hover:text-sky-500">
           <FaTwitter size={16} />
         </a>
-        <a href="#" aria-label="GitHub" className="hover:text-gray-900">
+        <a
+          href="https://github.com/Kudaiberd1"
+          target="_blank"
+          aria-label="GitHub"
+          className="hover:text-gray-900"
+        >
           <FaGithub size={16} />
         </a>
       </div>

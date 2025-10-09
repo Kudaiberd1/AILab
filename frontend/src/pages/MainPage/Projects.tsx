@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { status_dict } from "../../services/constants";
-import { FilteredProjects, TagContext } from "./MainPage";
+import { TagContext } from "./MainPage";
 import { useNavigate } from "react-router-dom";
-import { PhotoContext } from "../../App";
+import { FilteredProjects, PhotoContext } from "../../App";
 
 export interface Ids {
   id: number;

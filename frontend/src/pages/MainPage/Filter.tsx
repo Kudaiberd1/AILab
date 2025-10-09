@@ -1,11 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import {
-  FilteredProjects,
-  ProjectsContext,
   SelectedStatusContext,
   SelectedTagContext,
   TagContext,
 } from "./MainPage";
+import { FilteredProjects, ProjectsContext } from "../../App";
 
 export interface Tag {
   id: number;

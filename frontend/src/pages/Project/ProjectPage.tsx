@@ -202,11 +202,6 @@ const ProjectPage = () => {
                                       (authorr) => authorr.id === author
                                     )?.name
                                   }{" "}
-                                  {
-                                    authors?.find(
-                                      (authorr) => authorr.id === author
-                                    )?.surename
-                                  }
                                 </p>
                               </div>
                             ))

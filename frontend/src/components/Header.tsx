@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Authorized, UserContext } from "../App";
 
 const Header = () => {
-  const [clicked, setClicked] = useState(1);
   const navigate = useNavigate();
   const { authorized } = useContext(Authorized);
   const { user } = useContext(UserContext);
@@ -17,34 +16,15 @@ const Header = () => {
           {/* Menu bar */}
           <div className="flex">
             <img src={icon} height={30} width={50} />
-            <h1 className="[font-family:'Poppins',sans-serif] text-blue-500 text-2xl my-auto">
+            <h1
+              className="[font-family:'Poppins',sans-serif] text-blue-500 text-2xl my-auto cursor-pointer"
+              onClick={() => navigate("/")}
+            >
               AI
               <span className="[font-family:'Pacifico',cursive] my-auto">
                 lab
               </span>
             </h1>
-            <div className="flex space-x-2 ml-3">
-              <h1
-                className={`${
-                  clicked == 1 && "text-blue-500"
-                } cursor-pointer my-auto`}
-                onClick={() => {
-                  setClicked(1), navigate("/");
-                }}
-              >
-                {" "}
-                Home{" "}
-              </h1>
-              <h1
-                className={`${
-                  clicked == 2 && "text-blue-500"
-                } cursor-pointer my-auto`}
-                onClick={() => setClicked(2)}
-              >
-                {" "}
-                Filter{" "}
-              </h1>
-            </div>
           </div>
           {/* Search and login bar */}
           <div className="flex mr-5 space-x-2">
@@ -79,7 +59,7 @@ const Header = () => {
                         {user.is_staff && (
                           <li>
                             <Link
-                              to="/"
+                              to="/setting"
                               className="block px-4 py-2 text-sm hover:bg-gray-100 "
                             >
                               Settings

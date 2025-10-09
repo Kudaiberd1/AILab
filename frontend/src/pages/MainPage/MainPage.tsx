@@ -2,12 +2,10 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import image from "../../assets/image-1.png";
 import Filter, { type Tag } from "./Filter";
-import Projects, { type Project } from "./Projects";
-import { createContext, useEffect, useState } from "react";
+import Projects from "./Projects";
+import { createContext, useEffect, useRef, useState } from "react";
 import api from "../../api/api";
 
-export const FilteredProjects = createContext<any>(null);
-export const ProjectsContext = createContext<any>(null);
 export const TagContext = createContext<{
   tags: Tag[] | undefined;
   setTags: React.Dispatch<React.SetStateAction<Tag[] | undefined>>;
@@ -19,23 +17,17 @@ export const SelectedTagContext = createContext<any>(null);
 export const SelectedStatusContext = createContext<any>(null);
 
 const MainPage = () => {
-  const [projects, setProjects] = useState<Project[]>();
-  const [fprojects, setFprojects] = useState<Project[]>();
   const [tags, setTags] = useState<Tag[]>();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<number[]>([]);
 
+  const projectsRef = useRef<HTMLDivElement | null>(null);
+
+  const handleScrollToProjects = () => {
+    projectsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   useEffect(() => {
-    api
-      .get("/api/projects/")
-      .then((res) => {
-        setProjects(res.data);
-        setFprojects(res.data);
-        console.log(res.data, "projects");
-      })
-      .then((err) => {
-        console.log(err, "project err");
-      });
     api
       .get("/api/tag/")
       .then((res) => {
@@ -62,7 +54,10 @@ const MainPage = () => {
                 artificial intelligence as well as other domains of information
                 technology.
               </p>
-              <button className="bg-blue-600 rounded px-6 py-1 text-white cursor-pointer mt-5">
+              <button
+                className="bg-blue-600 rounded px-6 py-1 text-white cursor-pointer mt-5"
+                onClick={handleScrollToProjects}
+              >
                 Explore projects
               </button>
             </div>
@@ -71,20 +66,18 @@ const MainPage = () => {
             </div>
           </div>
           <TagContext.Provider value={{ tags, setTags }}>
-            <ProjectsContext.Provider value={{ projects, setProjects }}>
-              <FilteredProjects.Provider value={{ fprojects, setFprojects }}>
-                <SelectedTagContext.Provider
-                  value={{ selectedTags, setSelectedTags }}
-                >
-                  <SelectedStatusContext.Provider
-                    value={{ selectedStatus, setSelectedStatus }}
-                  >
-                    <Filter />
-                    <Projects />
-                  </SelectedStatusContext.Provider>
-                </SelectedTagContext.Provider>
-              </FilteredProjects.Provider>
-            </ProjectsContext.Provider>
+            <SelectedTagContext.Provider
+              value={{ selectedTags, setSelectedTags }}
+            >
+              <SelectedStatusContext.Provider
+                value={{ selectedStatus, setSelectedStatus }}
+              >
+                <Filter />
+                <span ref={projectsRef}>
+                  <Projects />
+                </span>
+              </SelectedStatusContext.Provider>
+            </SelectedTagContext.Provider>
           </TagContext.Provider>
         </main>
         <Footer />

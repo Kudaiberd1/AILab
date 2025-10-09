@@ -19,7 +19,7 @@ class ProjectApiView(APIView):
         serializer = ProjectSerializer(project)
         return Response(serializer.data, status=200)
     
-    def post(self, request, format=None):
+    def post(self, request,id, format=None):
         f_data=format_check_data(request.data)
 
         serializer = ProjectSerializer(data=f_data)
