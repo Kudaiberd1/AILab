@@ -1,13 +1,28 @@
 import { useContext, useState } from "react";
 import icon from "../assets/logo.svg";
 import { Link, useNavigate } from "react-router-dom";
-import { Authorized, UserContext } from "../App";
+import {
+  Authorized,
+  FilteredProjects,
+  ProjectsContext,
+  UserContext,
+} from "../App";
 
 const Header = () => {
   const navigate = useNavigate();
   const { authorized } = useContext(Authorized);
   const { user } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
+  const { projects } = useContext(ProjectsContext);
+  const { setFprojects } = useContext(FilteredProjects);
+  const [search, setSearch] = useState("");
+
+  const handleSubmit = (searchValue: string) => {
+    const filtered = projects.filter((project: any) =>
+      project.title.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFprojects(filtered);
+  };
 
   return (
     <>
@@ -31,6 +46,11 @@ const Header = () => {
             <input
               className="border border-gray-200 rounded px-3 py-1"
               placeholder="Search for projects..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                handleSubmit(e.target.value);
+              }}
             />
             <div className="space-x-2">
               {authorized ? (
